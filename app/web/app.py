@@ -55,38 +55,5 @@ class MainView:
                     <h1 align="center">{title}</h1>
                     </div>
                     """)
-            # 设置导航栏/Navbar
-            put_row(
-                [
-                    put_button(self.utils.t("快捷指令", 'iOS Shortcut'),
-                               onclick=lambda: ios_pop_window(), link_style=True, small=True),
-                    put_button(self.utils.t("开放接口", 'Open API'),
-                               onclick=lambda: api_document_pop_window(), link_style=True, small=True),
-                    put_button(self.utils.t("下载器", "Downloader"),
-                               onclick=lambda: downloader_pop_window(), link_style=True, small=True),
-                    put_button(self.utils.t("关于", 'About'),
-                               onclick=lambda: about_pop_window(), link_style=True, small=True),
-                ])
-
-            # 设置功能选择/Function selection
-            options = [
-                # Index: 0
-                self.utils.t('🔍批量解析视频', '🔍Batch Parse Video'),
-                # Index: 1
-                self.utils.t('🔍解析用户主页视频', '🔍Parse User Homepage Video'),
-                # Index: 2
-                self.utils.t('🥚小彩蛋', '🥚Easter Egg'),
-            ]
-            select_options = select(
-                self.utils.t('请在这里选择一个你想要的功能吧 ~', 'Please select a function you want here ~'),
-                required=True,
-                options=options,
-                help_text=self.utils.t('📎选上面的选项然后点击提交', '📎Select the options above and click Submit')
-            )
-            # 根据输入运行不同的函数
-            if select_options == options[0]:
-                parse_video()
-            elif select_options == options[1]:
-                put_markdown(self.utils.t('暂未开放，敬请期待~', 'Not yet open, please look forward to it~'))
-            elif select_options == options[2]:
-                a() if _config['Web']['Easter_Egg'] else put_markdown(self.utils.t('没有小彩蛋哦~', 'No Easter Egg~'))
+            # 直接显示批量解析视频的输入区域
+            parse_video()
