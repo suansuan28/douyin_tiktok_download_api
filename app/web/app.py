@@ -35,25 +35,58 @@ class MainView:
 
     # 主界面/Main view
     def main_view(self):
-        # 左侧导航栏/Left navbar
+        # 左側導航欄/Left navbar
         with use_scope('main'):
-            # 设置favicon/Set favicon
+            # 設置favicon/Set favicon
             favicon_url = _config['Web']['Favicon']
             session.run_js(f"""
                             $('head').append('<link rel="icon" type="image/png" href="{favicon_url}">')
                             """)
-            # 修改footer/Remove footer
+            # 移除footer/Remove footer
             session.run_js("""$('footer').remove()""")
-            # 设置不允许referrer/Set no referrer
+            # 設置不允許referrer/Set no referrer
             session.run_js("""$('head').append('<meta name=referrer content=no-referrer>');""")
-            # 设置标题/Set title
-            title = self.utils.t("TikTok/抖音无水印在线解析下载",
-                                 "Douyin/TikTok online parsing and download without watermark")
-            put_html(f"""
-                    <div align="center">
-                    <a href="/" alt="logo" ><img src="{favicon_url}" width="100"/></a>
-                    <h1 align="center">{title}</h1>
-                    </div>
-                    """)
-            # 直接显示批量解析视频的输入区域
-            parse_video()
+            # 設置標題/Set title
+            main_title = "短視頻無水印解析工具"
+            subtitle = "V20B在線工具提供抖音、快手、小紅書、西瓜視頻、皮皮蝦、B站、AcFun、今日頭條、虎牙、微視、好看視頻、綠洲等多平台的無水印視頻解析與下載服務。免費無廣告，快速便捷，支持多平台解析，簡單易用。"
+            put_html(f'''
+                <div style="background: linear-gradient(90deg, #36d1c4 0%, #5b86e5 100%); padding: 40px 0 20px 0; color: #fff; text-align: center;">
+                    <h1 style="font-size:2.5em; font-weight:bold; margin-bottom:10px;">{main_title}</h1>
+                    <div style="font-size:1.1em; max-width:700px; margin:0 auto;">{subtitle}</div>
+                </div>
+            ''')
+            put_html('<div style="height:40px;"></div>')
+            # 平台分類卡片
+            platforms = [
+                {"name": "抖音無水印解析", "icon": "<span style='font-size:2.5em;'>🎵</span>", "desc": "支持抖音視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "快手無水印解析", "icon": "<span style='font-size:2.5em;'>📢</span>", "desc": "支持快手視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "小紅書無水印解析", "icon": "<span style='font-size:2.5em;'>📕</span>", "desc": "支持小紅書視頻圖片無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "西瓜視頻無水印解析", "icon": "<span style='font-size:2.5em;'>🍉</span>", "desc": "支持西瓜視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "皮皮蝦無水印解析", "icon": "<span style='font-size:2.5em;'>🦐</span>", "desc": "支持皮皮蝦視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "Bilibili（B站）無水印解析", "icon": "<span style='font-size:2.5em;'>📺</span>", "desc": "支持B站視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "AcFun（A站）無水印解析", "icon": "<span style='font-size:2.5em;'>🎬</span>", "desc": "支持AcFun視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "今日頭條無水印解析", "icon": "<span style='font-size:2.5em;'>📰</span>", "desc": "支持今日頭條視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "虎牙視頻無水印解析", "icon": "<span style='font-size:2.5em;'>🐯</span>", "desc": "支持虎牙視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "微視無水印解析", "icon": "<span style='font-size:2.5em;'>🎤</span>", "desc": "支持微視視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "好看視頻無水印解析", "icon": "<span style='font-size:2.5em;'>▶️</span>", "desc": "支持好看視頻無水印解析與下載", "action": lambda: parse_video()},
+                {"name": "綠洲無水印解析", "icon": "<span style='font-size:2.5em;'>🌿</span>", "desc": "支持綠洲視頻無水印解析與下載", "action": lambda: parse_video()},
+            ]
+            # 三欄展示
+            rows = []
+            for i in range(0, len(platforms), 3):
+                row = []
+                for j in range(3):
+                    if i + j < len(platforms):
+                        p = platforms[i + j]
+                        row.append(
+                            put_button(f"{p['icon']}<br><b>{p['name']}</b><br><span style='font-size:0.95em;color:#888'>{p['desc']}</span>",
+                                       onclick=p['action'],
+                                       color='light',
+                                       outline=True,
+                                       shape='square',
+                                       size='large',
+                                       )
+                        )
+                rows.append(row)
+            put_table(rows, header=None)
+            put_html('<div style="height:40px;"></div>')
